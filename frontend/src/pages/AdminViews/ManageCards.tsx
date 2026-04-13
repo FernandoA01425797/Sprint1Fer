@@ -16,6 +16,18 @@ export function ManageCards(){
     const [cards, setCards] = useState<Card[]>([]);
     const [loading, setLoading] = useState(true);
 
+    // Form
+    const [formData, setForm] = useState({
+    nombre: "",
+    rareza: "",
+    tipo: "",
+    temporada: "",
+    numero: 0,
+    });
+
+    const [file, setFile] = useState<File | null>(null);
+    
+
     useEffect(() => {
         const fetchCards = async () => {
           const data = await getCards();
@@ -28,18 +40,33 @@ export function ManageCards(){
 
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        
-        
+    e.preventDefault(); // 🚨 evita recarga y duplicados
+
+    try {
         await addCard(
-            form.nombre,
-            form.rareza,
-            form.tipo,
-            form.temporada,
-            form.numero,
-            selectedFile
-            );
-        setShowForm(false);
+        formData.nombre,
+        formData.rareza,
+        formData.tipo,
+        formData.temporada,
+        formData.numero,
+        file || undefined
+        );
+
+        // ✅ limpiar formulario
+        setForm({
+        nombre: "",
+        rareza: "",
+        tipo: "",
+        temporada: "",
+        numero: 0,
+        });
+        setFile(null);
+
+        alert("Carta agregada correctamente 🚀");
+    } catch (error) {
+        console.error(error);
+        alert("Error al guardar la carta");
+    }
     };
 
     return (
@@ -162,8 +189,10 @@ export function ManageCards(){
                         </label>
                         <div className="flex gap-2">
                         <input
-                            type="text"
-                            value={formData.image}
+                            id = "imageUrl"
+                            type="file"
+                            placeholder= "Seleccione un archivo..."
+                            value= {imageUrl}
                             onChange={(e) =>
                             setFormData({ ...formData, image: e.target.value })
                             }
