@@ -1,14 +1,24 @@
-import NewsList from "../components/NewsList";
+import NewsList from "../components/NewsList copy";
 
 function News() {
   return (
     <section className="news-page-wrapper">
       <div className="news-page-container">
-        <div className="news-header">
-          <h1 className="news-main-title">NOTICIAS</h1>
-          <p className="news-main-subtitle">
-            Toda la actualidad del Valencia CF
-          </p>
+
+        
+        <div className="news-header-row">
+
+          
+          <div className="news-header">
+            <h1 className="news-main-title">NOTICIAS</h1>
+            <p className="news-main-subtitle">
+              Toda la actualidad del Valencia CF
+            </p>
+          </div>
+
+          
+          <button className="news-add-btn">+ Agregar noticia</button>
+
         </div>
 
         <div className="news-filters">

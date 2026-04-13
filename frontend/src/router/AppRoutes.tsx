@@ -17,7 +17,7 @@ export default function AppRoutes() {
         <Route path="/home" element={<Home />} />
         <Route path="/team" element={<Team />} />
         <Route path="/matches" element={<Matches />} />
-        <Route path="/news" element={<News />} />
+        <Route path="/news" element={<News  />} />
         <Route path="/fanzone" element={<FanZone />} />
         <Route path="/game" element={<Game />} />
         <Route path="/nou-mestalla" element={<NouMestalla />} />

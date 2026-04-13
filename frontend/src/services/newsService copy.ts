@@ -22,3 +22,20 @@ export const getNews = async (): Promise<News[]> => {
 
   return data as News[];
 };
+
+export const deleteNews = async (id: string) => {
+  const { data, error } = await supabase
+    .from("News")
+    .delete()
+    .eq("id", id)
+    .select();
+
+  if (error) {
+    console.error("Error al eliminar noticia:", error);
+    throw error;
+  }
+
+  console.log("Noticia eliminada en base:", data);
+
+  return data;
+};
