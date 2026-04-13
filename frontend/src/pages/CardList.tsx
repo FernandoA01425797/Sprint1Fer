@@ -21,7 +21,7 @@ export default function CardsList() {
   return (
     <div className="cards-container">
       {cards.map((card) => (
-        <div key={card.id} className="card">
+        <div key={card.uid} className="card">
           <h2>{card.nombre}</h2>
           <p>Rareza: {card.rareza}</p>
           <p>Tipo: {card.tipo}</p>
