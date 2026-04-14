@@ -21,7 +21,7 @@ export function ManageCards(){
     nombre: "",
     rareza: "",
     tipo: "",
-    temporada: "",
+    temporada: 0,
     numero: 0,
     });
 
@@ -52,11 +52,14 @@ export function ManageCards(){
         fileUpload || undefined
         );
 
+        const newCards = await getCards();
+        setCards(newCards);
+
         setForm({
         nombre: "",
         rareza: "",
         tipo: "",
-        temporada: "",
+        temporada: 0,
         numero: 0,
         });
         setFile(null);
@@ -80,8 +83,7 @@ export function ManageCards(){
                     Administra el catálogo completo de cartas coleccionables
                 </p>
                 </div>
-
-
+                
                 <div className="bg-card border-2 border-border rounded-lg p-6 mb-8">
                     <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
                     
@@ -93,6 +95,61 @@ export function ManageCards(){
                         <Plus size={20} />
                         AGREGAR CARTA
                         </button>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            {cards.map((card) => {
+                                return (
+                                <div
+                                    key={card.uid}
+                                    className="bg-card border-2 border-border rounded-lg overflow-hidden hover:border-vcf-orange transition-all hover:shadow-xl"
+                                >
+                                    {/* Imagen */}
+                                    <div className="relative aspect-[2/3] bg-gradient-to-br from-vcf-orange/20 to-vcf-yellow/20">
+                                    <img
+                                        src={card.image_url || "/placeholder.png"}
+                                        alt={card.nombre}
+                                        className="w-full h-full object-cover"
+                                    />
+
+                                    {/* Rareza badge */}
+                                    <div className="absolute top-2 right-2 bg-black text-white px-3 py-1 rounded-full text-xs font-black shadow-lg">
+                                        {card.rareza}
+                                    </div>
+                                    </div>
+
+                                    {/* Info */}
+                                    <div className="p-4">
+                                    <h3 className="font-black text-lg text-foreground mb-2">
+                                        {card.nombre}
+                                    </h3>
+
+                                    <p className="text-sm text-muted-foreground mb-1">
+                                        <span className="font-bold">Tipo:</span> {card.tipo}
+                                    </p>
+
+                                    <p className="text-sm text-muted-foreground mb-1">
+                                        <span className="font-bold">Temporada:</span> {card.temporada}
+                                    </p>
+
+                                    <p className="text-sm text-muted-foreground mb-3">
+                                        <span className="font-bold">Número:</span> {card.numero}
+                                    </p>
+
+                                    {/* Acciones */}
+                                    <div className="flex gap-2">
+                                        <button className="flex-1 px-3 py-2 bg-vcf-orange text-white rounded-lg font-bold hover:bg-[#e05516] transition-all">
+                                        Editar
+                                        </button>
+
+                                        <button className="px-3 py-2 bg-black text-white rounded-lg font-bold hover:bg-gray-900 transition-all">
+                                        Eliminar
+                                        </button>
+                                    </div>
+                                    </div>
+                                </div>
+                                );
+                            })}
+                        </div>
                     </div>
 
                 </div>
@@ -147,6 +204,40 @@ export function ManageCards(){
                             setForm({ ...formData, tipo: e.target.value })
                         }
                         placeholder="Ej. Jugador"
+                        className="w-full px-4 py-3 bg-muted border-2 border-transparent rounded-lg focus:border-vcf-orange outline-none transition-all text-foreground"
+                        />
+                    </div>
+
+                     {/* Card TEMPORADA */}
+                    <div>
+                        <label className="block text-sm font-bold text-foreground mb-2">
+                        Temporada *
+                        </label>
+                        <input
+                        type="number"
+                        required
+                        value={formData.temporada}
+                        onChange={(e) =>
+                            setForm({ ...formData, temporada: Number(e.target.value) })
+                        }
+                        placeholder="Ej. Jugador"
+                        className="w-full px-4 py-3 bg-muted border-2 border-transparent rounded-lg focus:border-vcf-orange outline-none transition-all text-foreground"
+                        />
+                    </div>
+
+                     {/* Card Numero */}
+                    <div>
+                        <label className="block text-sm font-bold text-foreground mb-2">
+                        Numero de la carta*
+                        </label>
+                        <input
+                        type="number"
+                        required
+                        value={formData.numero}
+                        onChange={(e) =>
+                            setForm({ ...formData, numero: Number(e.target.value)})
+                        }
+                        placeholder="Ej. 2"
                         className="w-full px-4 py-3 bg-muted border-2 border-transparent rounded-lg focus:border-vcf-orange outline-none transition-all text-foreground"
                         />
                     </div>
