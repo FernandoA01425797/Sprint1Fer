@@ -25,7 +25,7 @@ export function ManageCards(){
     numero: 0,
     });
 
-    const [file, setFile] = useState<File | null>(null);
+    const [fileUpload, setFile] = useState<File | null>(null);
     
 
     useEffect(() => {
@@ -40,7 +40,7 @@ export function ManageCards(){
 
 
     const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // 🚨 evita recarga y duplicados
+    e.preventDefault(); 
 
     try {
         await addCard(
@@ -49,10 +49,9 @@ export function ManageCards(){
         formData.tipo,
         formData.temporada,
         formData.numero,
-        file || undefined
+        fileUpload || undefined
         );
 
-        // ✅ limpiar formulario
         setForm({
         nombre: "",
         rareza: "",
@@ -62,7 +61,7 @@ export function ManageCards(){
         });
         setFile(null);
 
-        alert("Carta agregada correctamente 🚀");
+        alert("Carta agregada correctamente");
     } catch (error) {
         console.error(error);
         alert("Error al guardar la carta");
@@ -126,9 +125,9 @@ export function ManageCards(){
                         <input
                         type="text"
                         required
-                        value={formData.name}
+                        value={formData.nombre}
                         onChange={(e) =>
-                            setFormData({ ...formData, name: e.target.value })
+                            setForm({ ...formData, nombre: e.target.value })
                         }
                         placeholder="Ej: Hugo Duro"
                         className="w-full px-4 py-3 bg-muted border-2 border-transparent rounded-lg focus:border-vcf-orange outline-none transition-all text-foreground"
@@ -138,17 +137,16 @@ export function ManageCards(){
                     {/* Card Value */}
                     <div>
                         <label className="block text-sm font-bold text-foreground mb-2">
-                        Valor (Puntos) *
+                        Tipo de carta *
                         </label>
                         <input
-                        type="number"
+                        type="text"
                         required
-                        min="0"
-                        value={formData.value}
+                        value={formData.tipo}
                         onChange={(e) =>
-                            setFormData({ ...formData, value: e.target.value })
+                            setForm({ ...formData, tipo: e.target.value })
                         }
-                        placeholder="Ej: 100"
+                        placeholder="Ej. Jugador"
                         className="w-full px-4 py-3 bg-muted border-2 border-transparent rounded-lg focus:border-vcf-orange outline-none transition-all text-foreground"
                         />
                     </div>
@@ -156,91 +154,66 @@ export function ManageCards(){
                     {/* Category */}
                     <div>
                         <label className="block text-sm font-bold text-foreground mb-2">
-                        Categoría *
+                            Rareza *
                         </label>
-                        <div className="grid grid-cols-2 gap-3">
-                        {categories.slice(1).map((cat) => {
-                            const Icon = cat.icon;
-                            return (
-                            <button
-                                key={cat.id}
-                                type="button"
-                                onClick={() =>
-                                setFormData({ ...formData, category: cat.id })
-                                }
-                                className={`p-4 rounded-lg border-2 transition-all flex items-center gap-3 ${
-                                formData.category === cat.id
-                                    ? `${cat.color} border-transparent text-white shadow-lg`
-                                    : "bg-muted border-border text-muted-foreground hover:border-vcf-orange"
-                                }`}
-                            >
-                                <Icon size={20} />
-                                <span className="font-bold">{cat.label}</span>
-                            </button>
-                            );
-                        })}
-                        </div>
+
+                        <select
+                            value={formData.rareza}
+                            onChange={(e) =>
+                            setForm({ ...formData, rareza: e.target.value })
+                            }
+                            className="w-full p-3 rounded-lg border border-border bg-background text-foreground"
+                        >
+                            <option value="">Selecciona una rareza</option>
+                            <option value="Comun">Común</option>
+                            <option value="Rara">Rara</option>
+                            <option value="Epica">Épica</option>
+                            <option value="Legendaria">Legendaria</option>
+                        </select>
                     </div>
 
                     {/* Image URL */}
                     <div>
                         <label className="block text-sm font-bold text-foreground mb-2">
-                        URL de la Imagen
+                            Imagen
                         </label>
-                        <div className="flex gap-2">
-                        <input
-                            id = "imageUrl"
-                            type="file"
-                            placeholder= "Seleccione un archivo..."
-                            value= {imageUrl}
-                            onChange={(e) =>
-                            setFormData({ ...formData, image: e.target.value })
-                            }
-                            placeholder="figma:asset/... o URL de imagen"
-                            className="flex-1 px-4 py-3 bg-muted border-2 border-transparent rounded-lg focus:border-vcf-orange outline-none transition-all text-foreground"
-                        />
-                        <button
-                            type="button"
-                            className="px-4 py-3 bg-muted border-2 border-border rounded-lg hover:border-vcf-orange transition-all"
-                        >
-                            <Upload size={20} className="text-foreground" />
-                        </button>
-                        </div>
-                        <p className="text-xs text-muted-foreground mt-2">
-                        Deja vacío para usar imagen por defecto
-                        </p>
-                    </div>
 
-                    {/* Preview */}
-                    {formData.name && (
-                        <div className="bg-muted rounded-lg p-4">
-                        <p className="text-sm font-bold text-foreground mb-3">
-                            Vista Previa:
-                        </p>
-                        <div className="bg-card border-2 border-border rounded-lg p-4 max-w-xs">
-                            <div
-                            className={`w-12 h-12 ${getCategoryColor(formData.category)} rounded-lg flex items-center justify-center mb-3`}
+                        <div className="flex gap-2">
+                            {/* Input oculto */}
+                            <input
+                            type="file"
+                            accept="image/*"
+                            id="fileInput"
+                            className="hidden"
+                            onChange={(e) => {
+                                if (e.target.files && e.target.files[0]) {
+                                setFile(e.target.files[0]);
+                                }
+                            }}
+                            />
+
+                            {/* Fake input visual */}
+                            <input
+                            type="text"
+                            readOnly
+                            value={fileUpload ? fileUpload.name : "Selecciona un archivo..."}
+                            className="flex-1 px-4 py-3 bg-muted border-2 border-transparent rounded-lg text-foreground"
+                            />
+
+                            {/* Botón que abre el file picker */}
+                            <button
+                            type="button"
+                            onClick={() => document.getElementById("fileInput")?.click()}
+                            className="px-4 py-3 bg-muted border-2 border-border rounded-lg hover:border-vcf-orange transition-all"
                             >
-                            {React.createElement(
-                                getCategoryIcon(formData.category),
-                                { size: 24, className: "text-white" }
-                            )}
-                            </div>
-                            <h4 className="font-black text-lg mb-2 text-foreground">
-                            {formData.name}
-                            </h4>
-                            <p className="text-sm text-muted-foreground">
-                            <span className="font-bold">Valor:</span>{" "}
-                            {formData.value || "0"} pts
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                            <span className="font-bold">Categoría:</span>{" "}
-                            {categories.find((c) => c.id === formData.category)
-                                ?.label || "Común"}
-                            </p>
+                            <Upload size={20} className="text-foreground" />
+                            </button>
                         </div>
-                        </div>
-                    )}
+
+                        <p className="text-xs text-muted-foreground mt-2">
+                            Deja vacío para usar imagen por defecto
+                        </p>
+                    </div>                    
 
                     {/* Form Actions */}
                     <div className="flex gap-3 pt-4 border-t-2 border-border">

@@ -8,6 +8,7 @@ import Shop from "../pages/Shop";
 import NouMestalla from "../pages/NouMestalla";
 import MainLayout from "../layouts/MainLayout";
 import Game from "../pages/Game";
+import { ManageCards } from "../pages/AdminViews/ManageCards";
 
 export default function AppRoutes() {
   return (
@@ -22,6 +23,7 @@ export default function AppRoutes() {
         <Route path="/game" element={<Game />} />
         <Route path="/nou-mestalla" element={<NouMestalla />} />
         <Route path="/shop" element={<Shop />} />
+        <Route path="admin/cartas" element={<ManageCards />} />
       </Route>
     </Routes>
   );
