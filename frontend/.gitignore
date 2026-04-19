@@ -7,10 +7,16 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencias y build
 node_modules
 dist
 dist-ssr
 *.local
+
+# Variables de entorno (IMPORTANTE)
+.env
+.env.local
+.env.development.local
 
 # Editor directories and files
 .vscode/*
@@ -22,12 +28,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-# Variables de entorno
-.env
 
+# Build extra
 Build/
 *.br
 *.wasm
 
-# Claude Code
+# Claude Code (porque alguien decidió que esto existe)
 CLAUDE.md
