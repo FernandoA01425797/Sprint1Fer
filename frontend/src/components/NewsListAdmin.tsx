@@ -19,7 +19,7 @@ export default function NewsList({ category }: Props) {
   useEffect(() => {
     const fetchNews = async () => {
       setLoading(true);
-      const data = await getNews(category);
+      const data = await getNews();
       setNews(data);
       setLoading(false);
     };

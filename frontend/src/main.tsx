@@ -8,9 +8,9 @@ import "./styles/components.css";
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+  
     <BrowserRouter> {/* <-- ENVOLVER TODA LA APP AQUÍ */}
       <App />
     </BrowserRouter>
-  </React.StrictMode>,
+  ,
 )

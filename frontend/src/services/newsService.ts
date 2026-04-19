@@ -13,48 +13,19 @@ export type News = {
   destacada?: boolean;
 };
 
-export const getNews = async (category: string = "TODAS"): Promise<News[]> => {
-  let query = supabase
+export const getNews = async (): Promise<News[]> => {
+  const { data, error } = await supabase
     .from("News")
-    .select("*")
-    .order("published_at", { ascending: false });
-
-  if (category !== "TODAS") {
-    query = query.eq("categoria", category);
-  }
-
-  const { data, error } = await query;
+    .select("*");
 
   if (error) {
-    console.error("Error al obtener las noticias:", error);
+    console.error("NEWS ERROR message:", error.message);
+    console.error("NEWS ERROR details:", error.details);
+    console.error("NEWS ERROR hint:", error.hint);
+    console.error("NEWS ERROR code:", error.code);
     return [];
   }
 
-  return data as News[];
-};
-
-export const addNews = async (news: News): Promise<News | null> => {
-  const { data, error } = await supabase
-    .from("News")
-    .insert([
-      {
-        titulo: news.titulo,
-        contenido: news.contenido,
-        autor: news.autor ?? "Valencia Infinity",
-        categoria: news.categoria ?? "CLUB",
-        destacada: news.destacada ?? false,
-        vistas: news.vistas ?? 0,
-        Imagen: news.Imagen ?? null,
-        published_at: news.published_at ?? null,
-      },
-    ])
-    .select()
-    .single();
-
-  if (error) {
-    console.error("Error al agregar la noticia:", error);
-    throw error;
-  }
-
-  return data as News;
+  console.log("NEWS DATA:", data);
+  return (data ?? []) as News[];
 };

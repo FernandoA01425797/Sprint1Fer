@@ -7,36 +7,51 @@ const fallbackImage =
   "https://images.unsplash.com/photo-1543357480-c60d40007a3f?auto=format&fit=crop&w=1200&q=80";
 
 type Props = {
-  category: string;
+  category?: string;
 };
 
-export default function NewsList({ category }: Props) {
+export default function NewsList({ category = "TODAS" }: Props) {
   const [news, setNews] = useState<News[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchNews = async () => {
-      setLoading(true);
-      const data = await getNews(category);
-      setNews(data);
-      setLoading(false);
-    };
-  
+      try {
+        setLoading(true);
+        console.log("CATEGORY ENVIADA:", category);
 
-    
+        // Por ahora getNews sin filtro para aislar el problema
+        const data = await getNews();
+
+        console.log("NOTICIAS RECIBIDAS EN COMPONENTE:", data);
+        setNews(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error("Error en NewsList:", error);
+        setNews([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchNews();
   }, [category]);
 
-  if (loading) return <p className="news-loading">Cargando noticias...</p>;
+  if (loading) {
+    return <p className="news-loading">Cargando noticias...</p>;
+  }
+
+  if (news.length === 0) {
+    return <p className="news-loading">No hay noticias disponibles.</p>;
+  }
 
   return (
     <div className="news-grid">
       {news.map((item, i) => (
-        <article key={item.id} className="news-card">
+        <article key={item.id ?? i} className="news-card">
           <div className="news-image-wrapper">
             <img
               src={item.Imagen || fallbackImage}
-              alt={item.titulo}
+              alt={item.titulo || "Noticia"}
               className="news-card-image"
               onError={(e) => {
                 e.currentTarget.src = fallbackImage;
